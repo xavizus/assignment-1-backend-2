@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/xavizus/Backend-2-todoApp#readme",
   "dependencies": {
+    "bootstrap.native": "^3.0.10",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "mongoose": "^5.10.0",

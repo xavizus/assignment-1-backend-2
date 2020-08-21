@@ -8,7 +8,7 @@ class todoListModel {
         content: { type: String },
         done: { type: Boolean, default: false },
         belongsTo: { type: String }
-    }, {versionKey: false, timestamps: true});
+    }, {versionKey: false, timestamps: true, strict: "throw"});
 
     todoItemModel = mongoose.model('todoItem', this.todoItemSchema);
 

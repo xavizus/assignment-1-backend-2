@@ -3,30 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <title>Todo</title>
-    <link rel="stylesheet" href="/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
+    <link href="/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
     <script src="/scripts/vue.js"></script>
     <script src="/bootstrap-native.js"></script>
     <script src="/main.js"></script>
 </head>
 <body>
-
-<div class="container-lg">
-    <div class="row">
-        <div class="navbar navbar-expand-lg navbar-dark bg-dark col">
-            <a href="#" class="navbar-brand">TodoApp</a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="form-inline mb-2 mr-sm-2 mt-1">
-            <div class="input-group">
-                <input type="text" class="form-control autoSizingInput" id="addTask" placeholder="task">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" id="submitTask">Add task</button>
-                </div>
+<!-- Reusable modal -->
+<div id="myModal" class="modal fade" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModalTitle">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body" id="myModalContent">
+                Some content
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-success">Save changes</button>
             </div>
         </div>
     </div>
-    <div class="row" id="tableContent">
+</div>
+
+<!-- App -->
+<div id="app">
+    <div class="container-lg">
+        <div class="row">
+            <div class="navbar navbar-expand-lg navbar-dark bg-dark col">
+                <a class="navbar-brand" href="#">TodoApp</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-inline mb-2 mr-sm-2 mt-1">
+                <div class="input-group">
+                    <input class="form-control autoSizingInput" id="addTask" placeholder="task" type="text">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" id="submitTask" type="button">Add task</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="tableContent">
+            <todotable></todotable>
+        </div>
     </div>
 </div>
 </body>
