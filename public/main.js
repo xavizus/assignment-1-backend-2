@@ -5,23 +5,45 @@ window.addEventListener('DOMContentLoaded', (event) => {
           return {
               tag: 'p',
               onEvent: {
-                  click: this.revert
+                  blur: this.revert,
+                  keyup: this.revert
               },
               value: this.text,
-              value_: undefined
+              value_: undefined,
+              blocked: false
           }
         },
         methods: {
             revert: function(event) {
+                if(this.blocked) {
+                    return;
+                }
+                if(event.type === 'keyup' && event.key !== "Enter") {
+                    return;
+                }
                 if(this.tag === 'p'){
                     this.tag = 'input';
-                    this.onEvent = {blur: this.revert};
                 } else if(this.tag === 'input'){
+                    if(event.type ==='click') {
+                        return ;
+                    }
                     this.tag = 'p';
-                    this.onEvent = {click: this.revert};
+                    this.blocked = true;
+                    this.unblockTimeout();
+                    if(event.target.value.trim() == '') {
+                        return;
+                    }
                     this.value_ = this.value;
-                    this.postUpdate('title', event.target.value);
+                    this.value = event.target.value
+                    if(this.value !== this.value_) {
+                        this.postUpdate('title', this.value);
+                    }
                 }
+            },
+            unblockTimeout: function () {
+              setTimeout(() => {
+                  this.blocked = false;
+              },200)
             },
             postUpdate: function(type, value) {
                 let object = {}
@@ -39,8 +61,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
                     if (status !== 200) {
                         throw new Error(result.msg)
                     }
-                    this.value = value;
+
                 }).catch(async error => {
+                    this.value = this.value_;
                     console.error(error);
                 });
             }
@@ -62,13 +85,21 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 textContent = this.value;
             }
           return createElement(
-              this.tag, {
-                  attrs: attrs,
-                  on: this.onEvent,
-                  ref: 'input',
+              'td',
+              {
+                  on: {
+                      click: this.revert
+                  },
+                ref:'td'
               },
-              textContent
-          )
+              [
+                  createElement(this.tag, {
+                          attrs: attrs,
+                          on: this.onEvent,
+                          ref: 'input',
+                      }, textContent),
+
+              ])
         },
        props : ['text', 'id']
     });
@@ -99,6 +130,31 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let target = event.target;
                 console.log(target);
                 this.modalInstance.show();
+            },
+            update: function (event) {
+                let target = event.target;
+                let id = target.id;
+                let isChecked = event.target.checked;
+                let object = {}
+                object['done'] = isChecked;
+                fetch(`/api/v1/updateTodoItem/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                }).then(async response =>
+                {
+                    let status = response.status;
+                    let result = await response.json();
+                    if (status !== 200) {
+                        throw new Error(result.msg)
+                    }
+                }).catch(async error => {
+                    target.checked = !isChecked;
+                    console.error(error);
+                });
+
             }
         },
         template: `            
@@ -113,10 +169,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
           </thead>
           <tbody>
             <tr v-for="todoItem in todoItems">
-              <td><inputField :text="todoItem.title" :id="todoItem._id"></inputField></td>
+              <inputField :text="todoItem.title" :id="todoItem._id"></inputField>
               <td class="col-1 text-center">
                 <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" :id="todoItem._id" :checked="todoItem.done">
+                <input type="checkbox" class="custom-control-input" @input="update($event)" :id="todoItem._id" :checked="todoItem.done">
                   <label class="custom-control-label" :for="todoItem._id"></label>
                 </div>
               </td>
