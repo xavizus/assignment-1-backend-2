@@ -1,6 +1,58 @@
 window.addEventListener('DOMContentLoaded', (event) => {
+    Vue.component('addtask', {
+        data: function () {
+            return {
+                task: undefined
+            }
+        },
+        methods: {
+            addTask: function (event) {
+                event.preventDefault();
+                let value = this.task.trim()
+                if (value == ''){
+                    return;
+                }
 
-    const inputField =  Vue.component('inputField', {
+                this.postAddItem(value);
+            },
+            postAddItem: function(value) {
+                let object = {}
+                object['title'] = value;
+                fetch(`/api/v1/addTodoItem`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(object)
+                }).then(async response => {
+                    let status = response.status;
+                    let result = await response.json();
+                    if (status !== 200) {
+                        throw new Error(result.msg)
+                    }
+                    this.$root.$emit('newTodoItem', result);
+
+                }).catch(async error => {
+                    this.value = this.value_;
+                    console.error(error);
+                });
+            }
+        },
+        template: `
+          <div class="row">
+          <form class="form-inline mb-2 mr-sm-2 mt-1" @submit="this.addTask">
+            <div class="input-group">
+              <input class="form-control autoSizingInput" v-model="task" name="task" placeholder="task" type="text">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit">Add task</button>
+              </div>
+            </div>
+          </form>
+          </div>
+        `
+    });
+
+    const inputField = Vue.component('inputField', {
         data: function() {
           return {
               tag: 'p',
@@ -8,7 +60,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                   blur: this.revert,
                   keyup: this.revert
               },
-              value: this.text,
               value_: undefined,
               blocked: false
           }
@@ -101,7 +152,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
               ])
         },
-       props : ['text', 'id']
+       props : ['value', 'id']
     });
 
     Vue.component('todotable', {
@@ -111,6 +162,8 @@ window.addEventListener('DOMContentLoaded', (event) => {
                todoItems: undefined,
                formatDate: formatDate,
                modalInstance: new BSN.Modal('#myModal'),
+               sortColumn: 'createdAt',
+               sortDirection: 'DESC'
            }
        },
         components: {
@@ -120,7 +173,10 @@ window.addEventListener('DOMContentLoaded', (event) => {
            fetch('/api/v1/allTodoItems').then(async response =>
            {
                this.todoItems = await response.json()
-               console.log(this.todoItems);
+           });
+           this.$root.$on('newTodoItem',  async (todoObject)  => {
+               this.todoItems.pop();
+               this.todoItems.unshift(todoObject);
            });
         },
         methods: {
@@ -128,7 +184,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let modalTitle = document.getElementById('myModalTitle');
                 let modalContent = document.getElementById('myModalContent');
                 let target = event.target;
-                console.log(target);
                 this.modalInstance.show();
             },
             update: function (event) {
@@ -169,7 +224,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
           </thead>
           <tbody>
             <tr v-for="todoItem in todoItems">
-              <inputField :text="todoItem.title" :id="todoItem._id"></inputField>
+              <inputField :value="todoItem.title" :id="todoItem._id"></inputField>
               <td class="col-1 text-center">
                 <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" @input="update($event)" :id="todoItem._id" :checked="todoItem.done">
@@ -186,7 +241,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     });
 
     const vueApp = new Vue({
-        el: '#app'
+        el: '#app',
     });
 });
 
