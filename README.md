@@ -7,7 +7,7 @@ En Todo ska minst ha en `titel` och ett `done` fält.
 
 Webbtjänsten ska vara strukturerad enligt MVC (fast V:et är bara JSON).
 
-Level up 1:
+Level up 1: (Klar)
 - Bygg en FrontEnd som konsumerar webbtjänster med fetch eller axios.
 
 Level up 2: (Klar)

@@ -3,6 +3,9 @@ const {MissingKeysError} = require('../utilities/exceptionTypes');
 
 class todoListModel {
 
+    sort_asc = 1;
+    sort_desc = -1;
+
     todoItemSchema = new mongoose.Schema({
         title:  { type: String, required: true },
         content: { type: String },
@@ -25,8 +28,8 @@ class todoListModel {
 
     async updateTodoItem(objectId, dataObject) {
         try {
-            let result =  await this.todoItemModel.updateOne({"_id": objectId}, {$set: dataObject});
-            return {totalUpdated: result.n};
+            let result =  await this.todoItemModel.findOneAndUpdate({"_id": objectId}, {$set: dataObject}, {new: true, useFindAndModify: false});
+            return result;
         } catch(error) {
             throw new Error(error.message);
         }
@@ -35,7 +38,9 @@ class todoListModel {
     async getCountPages() {
         try {
             let totalPages = await this.getCountTodoList();
-            return Math.round(totalPages / process.env.PAGINATION_COUNT);
+            let notRounded = totalPages / process.env.PAGINATION_COUNT;
+            let result = Math.ceil(notRounded);
+            return result
         } catch(error) {
             throw new Error('Sum ting wong');
         }
@@ -49,17 +54,19 @@ class todoListModel {
         }
     }
 
-    async getTodoList(page = 0, sortDir='DESC') {
+    async getTodoList(page, sortDir='DESC', sortColumn='createdAt') {
         try {
-            let mongoDBSortDir = (sortDir.toUpperCase() === 'DESC' ? -1 : 1);
+            let mongoDBSortDir = (sortDir.toUpperCase() === 'DESC' ? this.sort_desc : this.sort_asc);
             let totalPages = await this.getCountPages()
             if (page >= totalPages) {
                 throw new Error('Not enough pages');
             }
+            let sortObject = {};
+            sortObject[sortColumn] = mongoDBSortDir
             return await this.todoItemModel.find()
                 .skip(page*process.env.PAGINATION_COUNT)
                 .limit(Number(process.env.PAGINATION_COUNT))
-                .sort({_id: mongoDBSortDir});
+                .sort(sortObject);
         } catch (error) {
             throw new Error(error.message);
         }

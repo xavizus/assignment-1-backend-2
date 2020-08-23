@@ -1,13 +1,15 @@
 const todoListModel = require('../models/todolist');
+const httpStatusCodes = require('../utilities/http-statusCodes');
 
 class todoListController {
 
     getAllTodoItems(req, res) {
-        if(!req.params.page) req.params.page = 0;
-        todoListModel.getTodoList(req.params.page, req.query.sortDir).then(response => {
+        const defaultPageIndex = 0;
+        if(!req.params.page) req.params.page = defaultPageIndex;
+        todoListModel.getTodoList(req.params.page, req.query.sortDir, req.query.sortColumn).then(response => {
             res.json(response);
         }).catch(error => {
-            res.status(400).json({msg: error.message});
+            res.status(httpStatusCodes.BadRequest).json({msg: error.message});
         }) ;
     }
 
@@ -15,13 +17,13 @@ class todoListController {
         todoListModel.updateTodoItem(req.params.objectId, req.body).then(response => {
             res.json(response);
         }).catch(error => {
-            res.status(400).json({msg: error.message});
+            res.status(httpStatusCodes.BadRequest).json({msg: error.message});
         });
     }
 
     getPaginationData(req, res) {
         todoListModel.getCountPages().then(response => {
-            res.json(response);
+            res.json({totalPages: (response)});
         })
     }
 
@@ -29,7 +31,7 @@ class todoListController {
         todoListModel.addTodoItem(req.body).then(response => {
             res.json(response);
         }).catch(error => {
-           res.status(400).json({msg: error.message});
+           res.status(httpStatusCodes.BadRequest).json({msg: error.message});
         });
     }
 
@@ -37,7 +39,7 @@ class todoListController {
         todoListModel.deleteTodoItem(req.params.objectId).then(response => {
             res.json(response);
         }).catch(error => {
-            res.status(400).json({msg: error.message});
+            res.status(httpStatusCodes.BadRequest).json({msg: error.message});
         })
     }
 
