@@ -20,7 +20,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             postAddItem: function (value) {
                 let object = {}
                 object['title'] = value;
-                fetch(`/api/v1/addTodoItem`, {
+                fetch(`/api/v1/todoItem`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -102,7 +102,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             postUpdate: function (type, value) {
                 let object = {}
                 object[type] = value;
-                fetch(`/api/v1/updateTodoItem/${this.id}`, {
+                fetch(`/api/v1/todoItem/${this.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -243,7 +243,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 this.emitPageChangeEvent();
             },
             getPagiationData: function() {
-                fetch(`/api/v1/pagination`).then(async response => {
+                fetch(`/api/v1/todoItem/pagination`).then(async response => {
                     let results = await response.json();
                     this.totalPages = results.totalPages;
                 });
@@ -350,7 +350,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
             },
             getPageData: function () {
-                fetch(`/api/v1/allTodoItems/${this.currentPage}?sortDir=${this.sortDirection}&sortColumn=${this.sortColumn}`).then(async response => {
+                fetch(`/api/v1/todoItem/${this.currentPage}?sortDir=${this.sortDirection}&sortColumn=${this.sortColumn}`).then(async response => {
                     let result = await response.json();
                     if(!Array.isArray(result)) {
                         return;

@@ -15,6 +15,17 @@ class todoListModel {
 
     todoItemModel = mongoose.model('todoItem', this.todoItemSchema);
 
+
+    /**
+     * Add a todo item to the database
+     * @param dataObject {
+     *     title: String *,
+     *     content: String,
+     *     done: Boolean Defaults false,
+     *     belongsTo: String or objectId
+     * }
+     * @returns {Promise<void>}
+     */
     async addTodoItem(dataObject) {
         try {
             return await this.todoItemModel.create(dataObject);
@@ -26,6 +37,12 @@ class todoListModel {
         }
     }
 
+    /**
+     * Updates an todoItem
+     * @param objectId
+     * @param dataObject
+     * @returns {Promise<*>}
+     */
     async updateTodoItem(objectId, dataObject) {
         try {
             let result =  await this.todoItemModel.findOneAndUpdate({"_id": objectId}, {$set: dataObject}, {new: true, useFindAndModify: false});
@@ -35,9 +52,13 @@ class todoListModel {
         }
     }
 
+    /**
+     * Get amount of pages for pagination
+     * @returns {Promise<number>}
+     */
     async getCountPages() {
         try {
-            let totalPages = await this.getCountTodoList();
+            let totalPages = await this.getTotalTodoItems();
             let notRounded = totalPages / process.env.PAGINATION_COUNT;
             let result = Math.ceil(notRounded);
             return result
@@ -46,7 +67,11 @@ class todoListModel {
         }
     }
 
-    async getCountTodoList() {
+    /**
+     * Get total todoItems
+     * @returns {Promise<*>}
+     */
+    async getTotalTodoItems() {
         try {
             return await this.todoItemModel.countDocuments({});
         } catch(error) {
@@ -54,6 +79,13 @@ class todoListModel {
         }
     }
 
+    /**
+     * Get todoList by page.
+     * @param page type Number
+     * @param sortDir type String ('DESC' or 'ASC')
+     * @param sortColumn type String
+     * @returns {Promise<*>}
+     */
     async getTodoList(page, sortDir='DESC', sortColumn='createdAt') {
         try {
             let mongoDBSortDir = (sortDir.toUpperCase() === 'DESC' ? this.sort_desc : this.sort_asc);
@@ -72,6 +104,11 @@ class todoListModel {
         }
     }
 
+    /**
+     * Removes a todoItem
+     * @param objectId
+     * @returns {Promise<{totalRemoved: (number|n|string)}>}
+     */
     async deleteTodoItem(objectId) {
         try {
             let result =  await this.todoItemModel.deleteOne({_id: objectId})
