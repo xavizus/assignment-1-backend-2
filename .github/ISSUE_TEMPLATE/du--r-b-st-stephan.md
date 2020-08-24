@@ -1,6 +1,6 @@
 ---
 name: Du är bäst Stephan
-about: Du behöver väldigt grym
+about: Du behöver inte förbättra dig! Du är redan bäst!
 title: ''
 labels: ''
 assignees: ''
