@@ -1,14 +1,15 @@
 const router = require('express').Router();
-const todoItemsController = require('../controllers/todoItemsController');
+const verifyToken = require('../controllers/authController').verifyToken;
+let todoItemsController = require('../controllers/todoItemsController');
 
-router.get('/pagination', todoItemsController.getPaginationData);
+router.get('/pagination', verifyToken.bind(todoItemsController), todoItemsController.getPaginationData.bind(todoItemsController));
 
-router.get('/:page?', todoItemsController.getAllTodoItems);
+router.get('/:page?', verifyToken.bind(todoItemsController), todoItemsController.getAllTodoItems.bind(todoItemsController));
 
-router.post('/', todoItemsController.addListItem);
+router.post('/', verifyToken.bind(todoItemsController), todoItemsController.addListItem.bind(todoItemsController));
 
-router.put('/:objectId', todoItemsController.updateTodoItem);
+router.put('/:objectId', verifyToken.bind(todoItemsController), todoItemsController.updateTodoItem.bind(todoItemsController));
 
-router.delete('/:objectId', todoItemsController.deleteTodoItem);
+router.delete('/:objectId', verifyToken.bind(todoItemsController), todoItemsController.deleteTodoItem.bind(todoItemsController));
 
 module.exports = router

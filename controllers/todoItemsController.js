@@ -1,16 +1,24 @@
 const todoListModel = require('../models/todolist');
+const baseController = require('./baseController');
 const httpStatusCodes = require('../utilities/http-statusCodes');
 
-class todoListController {
+class todoListController extends baseController {
 
-    getAllTodoItems(req, res) {
+    constructor() {
+        super();
+    }
+
+    async getAllTodoItems(req, res) {
         const defaultPageIndex = 0;
         if(!req.params.page) req.params.page = defaultPageIndex;
-        todoListModel.getTodoList(req.params.page, req.query.sortDir, req.query.sortColumn).then(response => {
-            res.json(response);
-        }).catch(error => {
-            res.status(httpStatusCodes.BadRequest).json({msg: error.message});
-        }) ;
+        try {
+            let result = await todoListModel.getTodoList(req.params.page, req.query.sortDir, req.query.sortColumn)
+            this.message = result;
+        } catch (error) {
+            this.httpStatus = httpStatusCodes.BadRequest;
+            this.message = {msg: error.message};
+        }
+        res.status(this.httpStatus).json(this.message);
     }
 
     updateTodoItem(req, res) {
@@ -28,19 +36,28 @@ class todoListController {
     }
 
     addListItem(req, res) {
-        todoListModel.addTodoItem(req.body).then(response => {
+        let newTodoItem = req.body;
+        newTodoItem.belongsTo = req.user.userId;
+        todoListModel.addTodoItem(newTodoItem).then(response => {
             res.json(response);
         }).catch(error => {
            res.status(httpStatusCodes.BadRequest).json({msg: error.message});
         });
     }
 
-    deleteTodoItem(req, res) {
-        todoListModel.deleteTodoItem(req.params.objectId).then(response => {
-            res.json(response);
-        }).catch(error => {
-            res.status(httpStatusCodes.BadRequest).json({msg: error.message});
-        })
+    async deleteTodoItem(req, res) {
+        try {
+            if(!req.user.isAdmin) {
+                throw new Error('Is not admin!');
+            }
+            this.message = todoListModel.deleteTodoItem(req.params.objectId);
+
+        } catch(error) {
+            this.httpStatus = httpStatusCodes.BadRequest;
+            this.message = {msg: error.message};
+        }
+
+        res.status(this.httpStatus).json(this.message);
     }
 
 }

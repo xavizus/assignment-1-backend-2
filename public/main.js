@@ -14,13 +14,12 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 if (value == '') {
                     return;
                 }
-
                 this.postAddItem(value);
             },
             postAddItem: function (value) {
                 let object = {}
                 object['title'] = value;
-                fetch(`/api/v1/todoItem`, {
+                fetch(`/api/v1/todoItems`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -102,7 +101,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             postUpdate: function (type, value) {
                 let object = {}
                 object[type] = value;
-                fetch(`/api/v1/todoItem/${this.id}`, {
+                fetch(`/api/v1/todoItems/${this.id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -243,7 +242,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 this.emitPageChangeEvent();
             },
             getPagiationData: function() {
-                fetch(`/api/v1/todoItem/pagination`).then(async response => {
+                fetch(`/api/v1/todoItems/pagination`).then(async response => {
                     let results = await response.json();
                     this.totalPages = results.totalPages;
                 });
@@ -296,7 +295,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
             inputField: inputField,
             pagination: pagination
         },
-        mounted() {
+        beforeMount() {
             this.getPageData();
             this.$root.$on('newTodoItem', async (todoObject) => {
                 if (this.sortDirection === 'DESC' && this.currentPage == 0) {
@@ -330,7 +329,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 let isChecked = event.target.checked;
                 let object = {}
                 object['done'] = isChecked;
-                fetch(`/api/v1/updateTodoItem/${id}`, {
+                fetch(`/api/v1/todoItems/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -350,8 +349,9 @@ window.addEventListener('DOMContentLoaded', (event) => {
 
             },
             getPageData: function () {
-                fetch(`/api/v1/todoItem/${this.currentPage}?sortDir=${this.sortDirection}&sortColumn=${this.sortColumn}`).then(async response => {
+                fetch(`/api/v1/todoItems/${this.currentPage}?sortDir=${this.sortDirection}&sortColumn=${this.sortColumn}`).then(async response => {
                     let result = await response.json();
+                    console.log(result);
                     if(!Array.isArray(result)) {
                         return;
                     }
