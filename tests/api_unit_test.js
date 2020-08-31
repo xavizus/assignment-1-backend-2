@@ -3,7 +3,7 @@ const expect = chai.expect;
 chai.use(require('chai-as-promised'));
 const sinon = require('sinon');
 require('../database/mongodb');
-const todoListModel = require('../models/todolist').todoListModel;
+const todoListModel = require('../models/todoItemModel').todoListModel;
 const {MissingKeysError} = require('../utilities/exceptionTypes');
 
 describe('API', function () {

@@ -1,4 +1,4 @@
-const todoListModel = require('../models/todolist');
+const todoListModel = require('../models/todoItemModel');
 const baseController = require('./baseController');
 const httpStatusCodes = require('../utilities/http-statusCodes');
 
