@@ -16,7 +16,7 @@ class todoListController extends baseController {
                 page: req.params.page,
                 sortDir: req.query.sortDir || 'DESC',
                 sortColumn: req.query.sortColumn || 'createdAt',
-                query: {belongsTo: req.user.userId}
+                query: {ownerId: req.user.userId}
             }
             if(req.user.isAdmin) {
                 dataObject.query =  {}
@@ -47,6 +47,7 @@ class todoListController extends baseController {
     addListItem(req, res) {
         let newTodoItem = req.body;
         newTodoItem.belongsTo = req.user.userId;
+        newTodoItem.todoListId = req.params.todoListId;
         todoListModel.addTodoItem(newTodoItem).then(response => {
             res.json(response);
         }).catch(error => {

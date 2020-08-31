@@ -6,7 +6,7 @@ router.get('/pagination', verifyToken.bind(todoItemsController), todoItemsContro
 
 router.get('/:page?', verifyToken.bind(todoItemsController), todoItemsController.getAllTodoItems.bind(todoItemsController));
 
-router.post('/', verifyToken.bind(todoItemsController), todoItemsController.addListItem.bind(todoItemsController));
+router.post('/:todoListId', verifyToken.bind(todoItemsController), todoItemsController.addListItem.bind(todoItemsController));
 
 router.patch('/:objectId', verifyToken.bind(todoItemsController), todoItemsController.updateTodoItem.bind(todoItemsController));
 

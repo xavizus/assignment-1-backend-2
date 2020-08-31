@@ -17,7 +17,7 @@ describe('API', function () {
                     done: false,
                     added: new Date(),
                     updated: new Date(),
-                    belongsTo: 'FakeUser'
+                    ownerId: 'FakeUser'
                 },
                 {
                     _id: 'FakeID 2',
@@ -26,7 +26,7 @@ describe('API', function () {
                     done: true,
                     added: new Date(),
                     updated: new Date(),
-                    belongsTo: 'FakeUser 2'
+                    ownerId: 'FakeUser 2'
                 }
             ];
             let stub = sinon.stub(todoListModel, 'getTodoList').returns(fixedData)
@@ -39,7 +39,7 @@ describe('API', function () {
                 'title': "Sum title",
                 'content': "Sum content",
                 'done': false,
-                'belongsTo': undefined
+                'ownerId': undefined
             };
             let result = await todoListModel.addTodoItem(fixedObject);
             expect(result).to.be.true;
