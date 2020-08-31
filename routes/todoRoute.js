@@ -8,7 +8,7 @@ router.get('/:page?', verifyToken.bind(todoItemsController), todoItemsController
 
 router.post('/', verifyToken.bind(todoItemsController), todoItemsController.addListItem.bind(todoItemsController));
 
-router.put('/:objectId', verifyToken.bind(todoItemsController), todoItemsController.updateTodoItem.bind(todoItemsController));
+router.patch('/:objectId', verifyToken.bind(todoItemsController), todoItemsController.updateTodoItem.bind(todoItemsController));
 
 router.delete('/:objectId', verifyToken.bind(todoItemsController), todoItemsController.deleteTodoItem.bind(todoItemsController));
 

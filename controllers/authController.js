@@ -26,7 +26,7 @@ class authController extends baseController {
             let result = userModel.verifyToken(token);
             req.user = {
                 userId: result._id,
-                isAdmin: ('admin' in result.roles)
+                isAdmin: result.roles.includes('admin')
             }
             next();
         } catch(error) {

@@ -12,7 +12,16 @@ class todoListController extends baseController {
         const defaultPageIndex = 0;
         if(!req.params.page) req.params.page = defaultPageIndex;
         try {
-            let result = await todoListModel.getTodoList(req.params.page, req.query.sortDir, req.query.sortColumn)
+            let dataObject = {
+                page: req.params.page,
+                sortDir: req.query.sortDir || 'DESC',
+                sortColumn: req.query.sortColumn || 'createdAt',
+                query: {belongsTo: req.user.userId}
+            }
+            if(req.user.isAdmin) {
+                dataObject.query =  {}
+            }
+            let result = await todoListModel.getTodoList(dataObject);
             this.message = result;
         } catch (error) {
             this.httpStatus = httpStatusCodes.BadRequest;
@@ -41,7 +50,7 @@ class todoListController extends baseController {
         todoListModel.addTodoItem(newTodoItem).then(response => {
             res.json(response);
         }).catch(error => {
-           res.status(httpStatusCodes.BadRequest).json({msg: error.message});
+            res.status(httpStatusCodes.BadRequest).json({msg: error.message});
         });
     }
 

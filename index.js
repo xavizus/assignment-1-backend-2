@@ -13,7 +13,6 @@ require('./database/mongodb');
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 app.use(express.static('./public'));
-app.use('/scripts',express.static(path.join(__dirname + '/node_modules/vue/dist')));
 
 /**
  * Routes
