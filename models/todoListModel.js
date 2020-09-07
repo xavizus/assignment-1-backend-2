@@ -6,7 +6,18 @@ class todoListModel {
         ownerId: { type: String, required: true },
     }, {versionKey: false, timestamps: true, strict: "throw"});
 
-    todoListSchema = mongoose.model('todoItem', this.todoListSchema);
+    todoListSchema = mongoose.model('todoLists', this.todoListSchema);
+
+    async addTodoList(dataObject) {
+        try {
+            return await this.todoItemModel.create(dataObject);
+        } catch(error) {
+            if(error.name === 'ValidationError') {
+                throw new Error(error.message);
+            }
+            throw error;
+        }
+    }
 }
 
 

@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT || 8080;
-const todoRouter = require('./routes/todoRoute');
+const todoItemsRouter = require('./routes/todoItemsRoute');
 const userRouter = require('./routes/userRoute');
 const authRouter = require('./routes/authRoute');
 const path = require('path');
@@ -18,7 +18,7 @@ app.use(express.static('./public'));
  * Routes
  */
 app.use('/api/v1/auth', authRouter);
-app.use('/api/v1/todoItems', todoRouter);
+app.use('/api/v1/todoItems', todoItemsRouter);
 app.use('/api/v1/users', userRouter);
 
 app.get('/', (req, res) => {
