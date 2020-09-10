@@ -9,33 +9,32 @@ const userModel = require('../../models/userModel');
 const {MissingKeysError} = require('../../utilities/exceptionTypes');
 const {users, taskLists} = require('../testData');
 
+
+async function clearDatabase(){
+    /**
+     * Clear everything!
+     */
+    await userModel.userModel.deleteMany({});
+    await todoListModel.todoListModel.deleteMany({});
+    await todoItemModel.todoItemModel.deleteMany({});
+}
+
 describe('Unit test', function () {
 
-    let testUsers = [];
-    let taskIdToDelete;
-    let taskIdToEdit;
-
-    beforeEach(async () => {
-        /**
-         * Create test users
-         */
-        for (const user of users) {
-            let testUser = await userModel.createUser(user, user.isAdmin);
-            testUsers.push(testUser);
-        }
-
-    });
-
-    afterEach(async () => {
-        /**
-         * Clear everything!
-         */
-        await userModel.userModel.deleteMany({});
-        await todoListModel.todoListModel.deleteMany({});
-        await todoItemModel.todoItemModel.deleteMany({});
-    });
-
     describe('User model tests', function () {
+        let testUsers = [];
+
+        beforeEach(async () => {
+            await clearDatabase();
+            testUsers = [];
+            /**
+             * Create test users
+             */
+            for (const user of users) {
+                let testUser = await userModel.createUser(user, user.isAdmin);
+                testUsers.push(testUser);
+            }
+        });
         describe('Successful tests', function () {
             it('Should be able to add a user', async function () {
                 const testUser = {
@@ -104,6 +103,19 @@ describe('Unit test', function () {
     });
 
     describe('TodoList Model tests', function () {
+        let testUsers = [];
+
+        beforeEach(async () => {
+            await clearDatabase();
+            testUsers = [];
+            /**
+             * Create test users
+             */
+            for (const user of users) {
+                let testUser = await userModel.createUser(user, user.isAdmin);
+                testUsers.push(testUser);
+            }
+        });
         describe('Successful tests', function () {
             it('Should create a todoList', async function() {
                 for(const user of testUsers) {
@@ -116,18 +128,7 @@ describe('Unit test', function () {
                     expect(result.title).to.equal(testList.title);
                 }
             });
-            it('Should get all todo lists for the specific user', async function() {
-                for(const user of testUsers) {
-                    let testList = {
-                        title: taskLists[0],
-                        userId: user._id,
-                    }
-                    await todoListModel.addTodoList(testList);
-                    let result = await todoListModel.getTodoLists({});
-                    expect(result).to.have.length(3);
-                }
-            });
-            it('Should get all todo lists for all users', async function () {
+            it('Should get all todo lists for the specific users', async function() {
                 for(const user of testUsers) {
                     let testList = {
                         title: taskLists[0],
@@ -140,9 +141,32 @@ describe('Unit test', function () {
                     expect(result[0].userId).to.equal(testList.userId);
                 }
             });
+            it('Should get all todo lists for all users', async function () {
+                for(const user of testUsers) {
+                    let testList = {
+                        title: taskLists[0],
+                        userId: user._id,
+                    }
+                    await todoListModel.addTodoList(testList);
+                }
+                let result = await todoListModel.getTodoLists({});
+                expect(result).to.have.length(3);
+
+            });
         });
         describe('Unsuccessful tests', function () {
-
+            it('Should get an empty todo list for specific users', async function() {
+                for(const user of testUsers) {
+                    let result = await todoListModel.getTodoLists({userId: user._id});
+                    expect(result).to.have.length(0);
+                }
+            });
+            it('Should get an empty todo list for non-existing user', async function() {
+                for(const user of testUsers) {
+                    let result = await todoListModel.getTodoLists({userId: "SomeUnknownUserThatShouldNotExist"});
+                    expect(result).to.have.length(0);
+                }
+            });
         });
     });
 
