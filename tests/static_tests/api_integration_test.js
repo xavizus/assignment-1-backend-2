@@ -37,7 +37,7 @@ describe('API',  function () {
                 testUser.todoLists.push(taskListResult._id);
 
                 for(let taskIndex = 0; taskIndex < randomNumberOfTasks; taskIndex++) {
-                    let taskItemResult = await todoItemModel.addTodoItem(
+                    await todoItemModel.addTodoItem(
                         {
                             title: listOfTasks[randomNumber(0, listOfTasks.length-1)],
                             userId: testUser._id,
@@ -46,6 +46,7 @@ describe('API',  function () {
                     )
                 }
             }
+            testUser.token = userModel.authenticateUser(user.username, user.password);
             testUsers.push(testUser);
         }
     });
@@ -64,10 +65,23 @@ describe('API',  function () {
                         username: user.username,
                         password: user.password
                     })
-                    .then((res) => {
-                        expect(res).to.have.status(200);
+                    .then((response) => {
+                        expect(response).to.have.status(200);
                     });
             }
+        });
+
+        it('Should get all of specific user todo lists', async function () {
+           for(let user of testUsers) {
+               await chai.request(app)
+                   .get('/api/v1/todolists')
+                   .set('Authorization', `Bearer ${user.token}`)
+                   .send()
+                   .then(response => {
+                      expect(response).to.have.status(200);
+                      expect(response.body).to.have.length(user.todoLists.length)
+                   });
+           }
         });
     });
     server.close();
