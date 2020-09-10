@@ -33,6 +33,17 @@ class todoListModel {
             throw error;
         }
     }
+
+    async deleteTodoList(query) {
+        try {
+            return await this.todoListModel.deleteOne(query)
+        } catch (error) {
+            if(error.name === 'ValidationError') {
+                throw new Error(error.message);
+            }
+            throw error;
+        }
+    }
 }
 
 module.exports = new todoListModel();
