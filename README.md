@@ -53,3 +53,28 @@ Vid varje anrop till servern skall en token medskickas i headern ( Bearer ). På
 
 #### Skapa nya användare (Done)
 Ditt API ska kunna hantera att skapa nya användare. Detta görs med en *POST* till resursen ```/users```. Endast administratörer får skapa användare ( dock måste den första ev. hårdkodas in alt. POSTAS in innan auth-funktionaliteten är på plats ).
+
+## Steg 3
+
+Todo App - Step 3
+
+Steg 3 för Todoappen är att börja lägga på enhetstester och integrationstester. (Done)
+
+För att inte lägga på en massa retroaktiva tester så ska ni implementera en av bonusbanorna för appen. (Done)
+
+Ni ska bygga om Datamodellen för appen så att todos tillhör en todolist, och användare kan skapa flera olika todolistor med olika titlar. (Done)
+
+Börja med enhetstester för alla modeller och fortsätt sedan med integrationstester för alla nya endpoints. (Stod alla.... Fuck...)
+
+## Bonus banor
+
+### Features
+- Multiple todo lists (Done)
+- Mark todos as urgent (Done)
+- Add query params for filtering and sorting for todos (Half done)
+- Add pagination (Done)
+- Share todo lists with other users
+
+### Architecture
+- Add a more robust error handling https://expressjs.com/en/guide/error-handling.html (Try and catch )
+- Add structured logging with Winston https://stackify.com/winston-logging-tutorial/
