@@ -15,7 +15,7 @@ class todoListModel {
         todoListId: {type: String, required: true}
     }, {versionKey: false, timestamps: true, strict: "throw"});
 
-    todoItemModel = mongoose.model('todoItem', this.todoItemSchema);
+    todoItemModel = mongoose.model('todoItems', this.todoItemSchema);
 
 
     /**

@@ -22,6 +22,17 @@ class todoListModel {
             throw error;
         }
     }
+
+    async getTodoLists(query) {
+        try {
+            return await this.todoListModel.find(query)
+        } catch (error) {
+            if(error.name === 'ValidationError') {
+                throw new Error(error.message);
+            }
+            throw error;
+        }
+    }
 }
 
 module.exports = new todoListModel();
