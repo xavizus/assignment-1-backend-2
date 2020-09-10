@@ -175,7 +175,7 @@ describe('Unit test', function () {
             it('Should update a todo list for user', async function () {
                for(const user of testUsers) {
                    const newTitle = "A New Title";
-                   let resultOfUpdated = await todoListModel.updateTodoList({title: newTitle, _id: user.todoList})
+                   let resultOfUpdated = await todoListModel.updateTodoList(user.todoList, {title: newTitle } )
                    let result = await todoListModel.getTodoLists({userId: user._id});
                    expect(result[0].title).to.equal(newTitle);
                }
