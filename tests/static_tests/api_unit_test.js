@@ -8,7 +8,6 @@ const todoItemModel = require('../../models/todoItemModel');
 const userModel = require('../../models/userModel');
 const {MissingKeysError} = require('../../utilities/exceptionTypes');
 const {users, taskLists} = require('../testData');
-const {randomNumber} = require('../../utilities/helperFunctions')
 
 describe('Unit test', function () {
 
@@ -109,7 +108,7 @@ describe('Unit test', function () {
             it('Should create a todoList', async function() {
                 for(const user of testUsers) {
                     let testList = {
-                        title: taskLists[Math.floor(Math.random() * taskLists.length)],
+                        title: taskLists[0],
                         userId: user._id,
                     }
                     let result = await todoListModel.addTodoList(testList);
@@ -118,7 +117,28 @@ describe('Unit test', function () {
                 }
             });
             it('Should get all todo lists for the specific user', async function() {
-
+                for(const user of testUsers) {
+                    let testList = {
+                        title: taskLists[0],
+                        userId: user._id,
+                    }
+                    await todoListModel.addTodoList(testList);
+                    let result = await todoListModel.getTodoLists({});
+                    expect(result).to.have.length(3);
+                }
+            });
+            it('Should get all todo lists for all users', async function () {
+                for(const user of testUsers) {
+                    let testList = {
+                        title: taskLists[0],
+                        userId: user._id,
+                    }
+                    await todoListModel.addTodoList(testList);
+                    let result = await todoListModel.getTodoLists({userId: user._id});
+                    expect(result).to.have.length(1);
+                    expect(result[0].title).to.equal(testList.title);
+                    expect(result[0].userId).to.equal(testList.userId);
+                }
             });
         });
         describe('Unsuccessful tests', function () {
