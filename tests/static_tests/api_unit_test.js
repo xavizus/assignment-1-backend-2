@@ -118,11 +118,12 @@ describe('Unit test', function () {
              */
             for (const user of users) {
                 let testUser = await userModel.createUser(user, user.isAdmin);
-                testUsers.push(testUser);
                 testUser.todoList = await todoListModel.addTodoList({
                     userId:testUser._id,
                     title: taskLists[0]
                 });
+                testUser.username = user.username
+                testUsers.push(testUser);
             }
         });
 
@@ -139,27 +140,47 @@ describe('Unit test', function () {
                 }
             });
             it('Should get all todo lists for the specific users', async function() {
+                /**
+                 * Arrange
+                 */
+                await todoListModel.todoListModel.deleteMany({});
                 for(const user of testUsers) {
                     let testList = {
                         title: taskLists[0],
                         userId: user._id,
                     }
+                    /**
+                     * Act
+                     */
                     await todoListModel.addTodoList(testList);
                     let result = await todoListModel.getTodoLists({userId: user._id});
-                    expect(result).to.have.length(1);
+                    /**
+                     * Assert
+                     */
+                    expect(result, `For user ${user.username}`).to.have.length(1);
                     expect(result[0].title).to.equal(testList.title);
                     expect(result[0].userId).to.equal(testList.userId);
                 }
             });
             it('Should get all todo lists for all users', async function () {
+                /**
+                 * Arrange
+                 */
+                await todoListModel.todoListModel.deleteMany({});
                 for(const user of testUsers) {
                     let testList = {
                         title: taskLists[0],
                         userId: user._id,
                     }
+                    /**
+                     * Act
+                     */
                     await todoListModel.addTodoList(testList);
                 }
                 let result = await todoListModel.getTodoLists({});
+                /**
+                 * Assert
+                 */
                 expect(result).to.have.length(3);
             });
 
@@ -190,7 +211,14 @@ describe('Unit test', function () {
                 expect(todoListModel.addTodoList(testList)).to.eventually.be.rejectedWith(Error).notify(done);
             });
             it('Should get an empty todo list for specific users', async function() {
+                /**
+                 * Arrange
+                 */
+                await todoListModel.todoListModel.deleteMany({});
                 for(const user of testUsers) {
+                    /**
+                     * Assert
+                     */
                     let result = await todoListModel.getTodoLists({userId: user._id});
                     expect(result).to.have.length(0);
                 }
