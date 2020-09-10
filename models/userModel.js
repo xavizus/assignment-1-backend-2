@@ -22,11 +22,11 @@ class userModel {
 
     userModel = mongoose.model('users', this.userSchema);
 
-    async createUser (userObject) {
-        if(! ("username" in userObject)) {
+    async createUser (userObject, createAdmin = false) {
+        if(! ("username" in userObject) || !userObject['username']) {
             throw new Error('Missing the key username!');
         }
-        if(! ("password" in userObject)) {
+        if(! ("password" in userObject) || !userObject['password']) {
             throw new Error('Missing the key password!')
         }
 
@@ -36,15 +36,17 @@ class userModel {
             let newUserObject = {
                 "username": userObject.username,
                 "passwordHash": bcrypt.hashSync(userObject.password, Number(process.env.NUMBER_OF_SALTS)),
-                "firstName": userObject.firstname,
-                "surname": userObject.surname
+                "firstName": userObject.firstName,
+                "surname": userObject.surname,
+                "roles": (createAdmin) ? ['admin', 'user'] : undefined
             }
             let result = await this.userModel.create(newUserObject);
 
-            let returnObject = {
-                _id: result._id,
+            return {
+                _id: result._id.toString(),
+                username: result.username,
+                roles: result.roles
             }
-            return returnObject
         } catch(error) {
             throw new Error(error.message);
         }

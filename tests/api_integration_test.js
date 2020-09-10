@@ -1,4 +1,5 @@
-const chai = require('chai')
+require('dotenv').config();
+const chai = require('chai');
 const chaiHTTP = require('chai-http');
 chai.use(chaiHTTP);
 const app = require('../index').app;
@@ -7,6 +8,11 @@ const expect = chai.expect;
 const someTasks = require('./testTasksToAdd.js');
 
 describe('API', function () {
+    let users = [];
+    before(async => {
+
+    });
+
     describe('Successful tests', function() {
         it('Should add shit ton of tasks',async function () {
             let cleanUpIds = [];
