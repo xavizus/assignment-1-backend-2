@@ -22,4 +22,8 @@ function isNotEmpty(object) {
     return !isEmpty(object);
 }
 
-module.exports = {isEmpty, isNull, isNotEmpty}
+function randomNumber(min = 0, max = 100) {
+    return Math.floor(Math.random() * (max+1))+min;
+}
+
+module.exports = {isEmpty, isNull, isNotEmpty, randomNumber}

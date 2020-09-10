@@ -10,7 +10,11 @@ class todoListModel {
 
     async addTodoList(dataObject) {
         try {
-            return await this.todoListModel.create(dataObject);
+            let result = await this.todoListModel.create(dataObject)
+            return {
+                title: result.title,
+                _id: result._id.toString()
+            }
         } catch(error) {
             if(error.name === 'ValidationError') {
                 throw new Error(error.message);
@@ -19,6 +23,5 @@ class todoListModel {
         }
     }
 }
-
 
 module.exports = new todoListModel();

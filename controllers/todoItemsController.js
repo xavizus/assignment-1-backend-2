@@ -16,7 +16,7 @@ class todoListController extends baseController {
                 page: req.params.page,
                 sortDir: req.query.sortDir || 'DESC',
                 sortColumn: req.query.sortColumn || 'createdAt',
-                query: {ownerId: req.user.userId}
+                query: {userId: req.user.userId}
             }
             if(req.user.isAdmin) {
                 dataObject.query =  {}
