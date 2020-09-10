@@ -181,13 +181,4 @@ describe('Unit test', function () {
             });
         });
     });
-
-    describe('todoItem Model tests', function () {
-        describe('Successful tests', function () {
-
-        });
-        describe('Unsuccessful tests', function () {
-
-        });
-    });
 });
