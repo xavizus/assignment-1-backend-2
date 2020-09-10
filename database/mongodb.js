@@ -11,3 +11,5 @@ mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 if (!mongoose.connection) {
     throw new MongooseError("Could not connect to database!");
 }
+
+module.exports = {mongoose}

@@ -7,7 +7,7 @@ const todoItemsRouter = require('./routes/todoItemsRoute');
 const userRouter = require('./routes/userRoute');
 const authRouter = require('./routes/authRoute');
 const path = require('path');
-require('./database/mongodb');
+let {mongoose} = require('./database/mongodb');
 /**
  * Middleware
  */

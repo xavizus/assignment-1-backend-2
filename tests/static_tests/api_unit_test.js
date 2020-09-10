@@ -2,7 +2,7 @@ require('dotenv').config();
 const chai = require('chai');
 const expect = chai.expect;
 chai.use(require('chai-as-promised'));
-require('../../database/mongodb');
+let {mongoose} = require('../../database/mongodb');
 const todoListModel = require('../../models/todoListModel');
 const todoItemModel = require('../../models/todoItemModel');
 const userModel = require('../../models/userModel');
@@ -21,6 +21,10 @@ async function clearDatabase(){
 
 describe('Unit test', function () {
 
+    after(() => {
+        mongoose.connection.close();
+    });
+
     describe('User model tests', function () {
         let testUsers = [];
 
@@ -35,6 +39,7 @@ describe('Unit test', function () {
                 testUsers.push(testUser);
             }
         });
+
         describe('Successful tests', function () {
             it('Should be able to add a user', async function () {
                 const testUser = {
@@ -49,7 +54,7 @@ describe('Unit test', function () {
                 expect(result.roles[0]).to.eql('user');
             });
 
-            it('Should be able to authenticate a user', async function () {
+            it('Should be able to authenticate multiple users', async function () {
                for(const user of users) {
                     await expect(userModel.authenticateUser(user.username, user.password))
                         .to.eventually.be.an("String");
@@ -116,6 +121,7 @@ describe('Unit test', function () {
                 testUsers.push(testUser);
             }
         });
+
         describe('Successful tests', function () {
             it('Should create a todoList', async function() {
                 for(const user of testUsers) {
@@ -155,6 +161,12 @@ describe('Unit test', function () {
             });
         });
         describe('Unsuccessful tests', function () {
+            it('Should fail to create todo list, missing title', function (done) {
+                let testList = {
+                    userId: testUsers[0]._id,
+                }
+                expect(todoListModel.addTodoList(testList)).to.eventually.be.rejectedWith(Error).notify(done);
+            });
             it('Should get an empty todo list for specific users', async function() {
                 for(const user of testUsers) {
                     let result = await todoListModel.getTodoLists({userId: user._id});
