@@ -44,6 +44,17 @@ class todoListModel {
             throw error;
         }
     }
+
+    async updateTodoList(todoListId, updateObject) {
+        try {
+            return await this.todoListModel.findOneAndUpdate({_id: todoListId}, {$set:updateObject}, {new: true, useFindAndModify: false})
+        } catch (error) {
+            if(error.name === 'ValidationError') {
+                throw new Error(error.message);
+            }
+            throw error;
+        }
+    }
 }
 
 module.exports = new todoListModel();

@@ -178,6 +178,7 @@ describe('Unit test', function () {
                    let resultOfUpdated = await todoListModel.updateTodoList(user.todoList, {title: newTitle } )
                    let result = await todoListModel.getTodoLists({userId: user._id});
                    expect(result[0].title).to.equal(newTitle);
+                   expect(resultOfUpdated.title).to.equal(newTitle);
                }
             });
         });
