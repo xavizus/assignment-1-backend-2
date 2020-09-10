@@ -46,7 +46,7 @@ describe('API',  function () {
                     )
                 }
             }
-            testUser.token = userModel.authenticateUser(user.username, user.password);
+            testUser.token = await userModel.authenticateUser(user.username, user.password);
             testUsers.push(testUser);
         }
     });
@@ -73,6 +73,9 @@ describe('API',  function () {
 
         it('Should get all of specific user todo lists', async function () {
            for(let user of testUsers) {
+               if(user.roles.includes('admin')) {
+                   continue;
+               }
                await chai.request(app)
                    .get('/api/v1/todolists')
                    .set('Authorization', `Bearer ${user.token}`)
