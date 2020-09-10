@@ -119,6 +119,7 @@ describe('Unit test', function () {
             for (const user of users) {
                 let testUser = await userModel.createUser(user, user.isAdmin);
                 testUsers.push(testUser);
+                testUser.todoList = todoItemModel.addTodoItem({userId: user.userId, title: taskLists[0]})
             }
         });
 
@@ -157,7 +158,14 @@ describe('Unit test', function () {
                 }
                 let result = await todoListModel.getTodoLists({});
                 expect(result).to.have.length(3);
+            });
 
+            it('Should delete a todo list from user', async function () {
+                for(const user of testUsers) {
+                    await todoListModel.deleteTodoList({userId: user._id, _id: user.todoList})
+                    let result = await todoListModel.getTodoLists({userId: user._id});
+                    expect(result).to.have.length(0);
+                }
             });
         });
         describe('Unsuccessful tests', function () {
