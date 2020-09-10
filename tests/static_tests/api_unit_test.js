@@ -119,7 +119,10 @@ describe('Unit test', function () {
             for (const user of users) {
                 let testUser = await userModel.createUser(user, user.isAdmin);
                 testUsers.push(testUser);
-                testUser.todoList = todoItemModel.addTodoItem({userId: user.userId, title: taskLists[0]})
+                testUser.todoList = await todoListModel.addTodoList({
+                    userId:testUser._id,
+                    title: taskLists[0]
+                });
             }
         });
 
@@ -162,10 +165,20 @@ describe('Unit test', function () {
 
             it('Should delete a todo list from user', async function () {
                 for(const user of testUsers) {
-                    await todoListModel.deleteTodoList({userId: user._id, _id: user.todoList})
+                    let deleted = await todoListModel.deleteTodoList({userId: user._id, _id: user.todoList})
                     let result = await todoListModel.getTodoLists({userId: user._id});
                     expect(result).to.have.length(0);
+                    expect(deleted.deletedCount).to.equal(1);
                 }
+            });
+
+            it('Should update a todo list for user', async function () {
+               for(const user of testUsers) {
+                   const newTitle = "A New Title";
+                   let resultOfUpdated = await todoListModel.updateTodoList({title: newTitle, _id: user.todoList})
+                   let result = await todoListModel.getTodoLists({userId: user._id});
+                   expect(result[0].title).to.equal(newTitle);
+               }
             });
         });
         describe('Unsuccessful tests', function () {
