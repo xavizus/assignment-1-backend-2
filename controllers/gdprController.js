@@ -3,6 +3,8 @@ const userModel = require('../models/userModel');
 const todoListModel = require('../models/todoListModel');
 const todoItemModel = require('../models/todoItemModel');
 const httpStatusCodes = require('../utilities/http-statusCodes');
+const path = require('path');
+const fs = require('fs');
 
 class gdprController extends baseController {
     constructor() {
@@ -36,6 +38,17 @@ class gdprController extends baseController {
                 todoLists,
                 userInformation
             }
+        } catch (error) {
+            this.message = error.message;
+            this.status = httpStatusCodes.BadRequest;
+        }
+        res.status(this.httpStatus).json(this.message);
+    }
+
+    getCookiePolicy(req, res) {
+        try {
+            let rawData = fs.readFileSync(path.resolve(__dirname + '/../public/cookie.json'));
+            this.message = JSON.parse(rawData);
         } catch (error) {
             this.message = error.message;
             this.status = httpStatusCodes.BadRequest;

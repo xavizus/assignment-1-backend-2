@@ -141,8 +141,8 @@ describe('API',  function () {
                .send()
                .then(response => {
                   expect(response).to.have.status(200);
-                  expect(response).to.have.header('Content-Type', 'application/json');
-                  expect(response.body.length).to.be.equal(2);
+                  expect(response).to.have.header('Content-Type', 'application/json; charset=utf-8');
+                  expect(Object.keys(response.body).length).to.be.equal(2);
                });
         });
     });
