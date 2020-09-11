@@ -153,7 +153,7 @@ describe('Unit test', function () {
                      * Act
                      */
                     await todoListModel.addTodoList(testList);
-                    let result = await todoListModel.getTodoLists({userId: user._id});
+                    let result = await todoListModel.getTodoLists(user._id);
                     /**
                      * Assert
                      */
@@ -177,7 +177,7 @@ describe('Unit test', function () {
                      */
                     await todoListModel.addTodoList(testList);
                 }
-                let result = await todoListModel.getTodoLists({});
+                let result = await todoListModel.getTodoLists();
                 /**
                  * Assert
                  */
@@ -187,7 +187,7 @@ describe('Unit test', function () {
             it('Should delete a todo list from user', async function () {
                 for(const user of testUsers) {
                     let deleted = await todoListModel.deleteTodoList({userId: user._id, _id: user.todoList})
-                    let result = await todoListModel.getTodoLists({userId: user._id});
+                    let result = await todoListModel.getTodoLists( user._id);
                     expect(result).to.have.length(0);
                     expect(deleted.deletedCount).to.equal(1);
                 }
@@ -197,7 +197,7 @@ describe('Unit test', function () {
                for(const user of testUsers) {
                    const newTitle = "A New Title";
                    let resultOfUpdated = await todoListModel.updateTodoList(user.todoList, {title: newTitle } )
-                   let result = await todoListModel.getTodoLists({userId: user._id});
+                   let result = await todoListModel.getTodoLists(user._id);
                    expect(result[0].title).to.equal(newTitle);
                    expect(resultOfUpdated.title).to.equal(newTitle);
                }
@@ -219,13 +219,13 @@ describe('Unit test', function () {
                     /**
                      * Assert
                      */
-                    let result = await todoListModel.getTodoLists({userId: user._id});
+                    let result = await todoListModel.getTodoLists(user._id);
                     expect(result).to.have.length(0);
                 }
             });
             it('Should get an empty todo list for non-existing user', async function() {
                 for(const user of testUsers) {
-                    let result = await todoListModel.getTodoLists({userId: "SomeUnknownUserThatShouldNotExist"});
+                    let result = await todoListModel.getTodoLists("SomeUnknownUserThatShouldNotExist");
                     expect(result).to.have.length(0);
                 }
             });

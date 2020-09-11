@@ -23,8 +23,9 @@ class todoListModel {
         }
     }
 
-    async getTodoLists(query) {
+    async getTodoLists(userId= undefined) {
         try {
+            let query = (userId)? {userId} : {}
             return await this.todoListModel.find(query)
         } catch (error) {
             if(error.name === 'ValidationError') {
