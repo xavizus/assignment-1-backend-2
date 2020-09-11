@@ -9,7 +9,7 @@ class gdprController extends baseController {
         super();
     }
 
-    async clearUserInformation(req, res){
+    async clearUserInformation(req, res) {
         try {
             let deletedItems = await todoItemModel.deleteAllUserTodoItems(req.user.userId);
             let deletedTodoLists = await todoListModel.deleteAllUserTodoLists(req.user.userId);
@@ -22,6 +22,23 @@ class gdprController extends baseController {
         } catch(error) {
             this.message = error.message;
             this.httpStatus = httpStatusCodes.BadRequest;
+        }
+        res.status(this.httpStatus).json(this.message);
+    }
+
+    async getUserInformation(req, res) {
+        try {
+            let todoItems = await todoItemModel.getAllTodoItemsByUserId(req.user.userId);
+            let todoLists = await todoListModel.getTodoLists(req.user.userId);
+            let userInformation = await userModel.findUserById(req.user.userId);
+            this.message = {
+                todoItems,
+                todoLists,
+                userInformation
+            }
+        } catch (error) {
+            this.message = error.message;
+            this.status = httpStatusCodes.BadRequest;
         }
         res.status(this.httpStatus).json(this.message);
     }

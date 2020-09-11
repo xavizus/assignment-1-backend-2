@@ -128,9 +128,11 @@ describe('API',  function () {
                 .send()
                 .then(response => {
                    expect(response).to.have.status(200);
-                   expect(response.body.todoItems).to.equal(testUsers[0].todoItems.length);
-                   expect(response.body.todoLists).to.equal(testUsers[0].deletedTodoLists.length);
-                   expect(response.body.userInformation).to.equal(1);
+                   expect(response.body.todoItems.length).to.equal(testUsers[0].todoItems.length);
+                   expect(response.body.todoLists.length).to.equal(testUsers[0].todoLists.length);
+                   expect(response.body.userInformation).to.haveOwnProperty('roles');
+                   expect(response.body.userInformation).to.haveOwnProperty('_id');
+                   expect(response.body.userInformation._id).to.equal(testUsers[0]._id);
                 });
         });
     });
