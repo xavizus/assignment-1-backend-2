@@ -55,6 +55,15 @@ class todoListModel {
             throw error;
         }
     }
+
+    async deleteAllUserTodoLists(userId) {
+        try {
+            let result = await this.todoListModel.deleteMany({userId});
+            return {totalRemoved: result.n}
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }
 
 module.exports = new todoListModel();

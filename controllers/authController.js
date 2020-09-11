@@ -19,11 +19,14 @@ class authController extends baseController {
         res.status(this.httpStatus).json(this.message);
     }
 
-    static verifyToken(req, res, next) {
+    static async verifyToken(req, res, next) {
         try {
             let authorizationHeader = req.headers.authorization;
             let token = authorizationHeader.substr(authorizationHeader.lastIndexOf(' ')+1);
             let result = userModel.verifyToken(token);
+            if(!await userModel.userExistByUserId(result._id)) {
+                throw new Error('User does no longer exist!');
+            }
             req.user = {
                 userId: result._id,
                 isAdmin: result.roles.includes('admin')

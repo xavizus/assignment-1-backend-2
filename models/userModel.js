@@ -30,7 +30,7 @@ class userModel {
             throw new Error('Missing the key password!')
         }
 
-        if(await this.userExists(userObject.username)) throw new Error('Username already exists!');
+        if(await this.userExistsByUsername(userObject.username)) throw new Error('Username already exists!');
 
         try {
             let newUserObject = {
@@ -75,8 +75,14 @@ class userModel {
         return bcrypt.compareSync(password, passwordHash);
     }
 
-    async userExists (username) {
+    async userExistsByUsername (username) {
         let result = await this.findUserByUsername(username);
+        result = isNull(result) ? result : result._doc
+        return isNotEmpty(result);
+    }
+
+    async userExistByUserId(id) {
+        let result = await this.findUserById(id);
         result = isNull(result) ? result : result._doc
         return isNotEmpty(result);
     }
@@ -96,6 +102,15 @@ class userModel {
 
     verifyToken(token) {
         return jwt.verify(token, process.env["JWT_SECRET"]);
+    }
+
+    async deleteUser(_id) {
+        try {
+            let result = await this.userModel.deleteOne({_id});
+            return {totalRemoved: result.n}
+        } catch (error) {
+            throw new Error(error.message);
+        }
     }
 }
 

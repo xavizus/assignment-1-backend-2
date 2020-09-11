@@ -119,6 +119,15 @@ class todoListModel {
             throw new Error(error.message);
         }
     }
+
+    async deleteAllUserTodoItems(userId) {
+        try {
+            let result = await this.todoItemModel.deleteMany({userId});
+            return {totalRemoved: result.n}
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }
 
 module.exports = new todoListModel()

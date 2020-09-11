@@ -6,6 +6,7 @@ const todoItemsRouter = require('./routes/todoItemsRoute');
 const userRouter = require('./routes/userRoute');
 const authRouter = require('./routes/authRoute');
 const todoListRouter = require('./routes/todoListRoute');
+const gdprRouter = require('./routes/gdprRoute');
 const path = require('path');
 let {mongoose} = require('./database/mongodb');
 /**
@@ -22,6 +23,7 @@ app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/todoItems', todoItemsRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/todoLists', todoListRouter);
+app.use('/api/v1/gdpr', gdprRouter);
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/views/index.html'));
