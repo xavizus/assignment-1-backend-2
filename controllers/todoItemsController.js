@@ -21,7 +21,7 @@ class todoListController extends baseController {
             if(req.user.isAdmin) {
                 dataObject.query =  {}
             }
-            let result = await todoListModel.getTodoList(dataObject);
+            let result = await todoListModel.getTodoItems(dataObject);
             this.message = result;
         } catch (error) {
             this.httpStatus = httpStatusCodes.BadRequest;

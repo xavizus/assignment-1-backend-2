@@ -88,7 +88,7 @@ class todoListModel {
      * @param sortColumn type String
      * @returns {Promise<*>}
      */
-    async getTodoList(dataObject) {
+    async getTodoItems(dataObject) {
         try {
             let mongoDBSortDir = (dataObject.sortDir.toUpperCase() === 'DESC' ? this.sort_desc : this.sort_asc);
             let totalPages = await this.getCountPages();
@@ -101,6 +101,14 @@ class todoListModel {
                 .skip(dataObject.page*process.env.PAGINATION_COUNT)
                 .limit(Number(process.env.PAGINATION_COUNT))
                 .sort(sortObject);
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    async getAllTodoItemsByUserId(userId) {
+        try {
+            return await this.todoItemModel.find({userId});
         } catch (error) {
             throw new Error(error.message);
         }
