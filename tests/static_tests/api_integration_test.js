@@ -135,6 +135,16 @@ describe('API',  function () {
                    expect(response.body.userInformation._id).to.equal(testUsers[0]._id);
                 });
         });
+        it('Should get Cookie policy', async function () {
+           await chai.request(app)
+               .get('/api/v1/gdpr/cookiePolicy')
+               .send()
+               .then(response => {
+                  expect(response).to.have.status(200);
+                  expect(response).to.have.header('Content-Type', 'application/json');
+                  expect(response.body.length).to.be.equal(2);
+               });
+        });
     });
     server.close();
 });

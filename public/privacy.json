@@ -1,0 +1,17 @@
+{
+  "header": "INTEGRITETSPOLICY",
+  "chapters": [
+    {
+      "header": "Vilken data sparas?",
+      "content": "I Todo-applikationen så sparar vi användarens användaruppgifter som tillhandahålls vid registrering av konto. Dessa uppgifter innefattar email och lösenord.</br>Vi sparar även användningsdata som innefattar användarens todo-listor och todo-items, vilka användaren själv skapar i applikationen.\n"
+    },
+    {
+      "header": "Varför sparas data / hur använder vi data?",
+      "content": "Användaruppgifterna sparas för att identifiera användaren i syfte att kunna visa den användningsdata som användaren har skapat."
+    },
+    {
+      "header": "Hur vi tar bort data?",
+      "content": "Användaren har rätt att begära borttagning av sin persondata. För att begära borttagning behöver användaren logga in och sedan klicka i boxen “Jag vill bli bortglömd” och sedan klicka på knappen “Spara”. När detta genomförts kommer användarens konto att upphöra och samtlig persondata kommer raderas. \n"
+    }
+  ]
+}

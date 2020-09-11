@@ -1,0 +1,17 @@
+{
+  "header": "COOKIE POLICY",
+  "chapters": [
+    {
+      "header": "Vilken data sparas i cookies?",
+      "content": "I todo-applikation sparar vi en identifikation i form av en kryterad token. Denna token sparas i sessionStorage för att användaren ska kunna logga in och så att applikation ska fungera på ett tillfredsställande vis."
+    },
+    {
+      "header": "Varför sparas datan i cookies?",
+      "content": "Datan sparas i cookies för att användaren ska kunna identifieras vid inloggning.<br>Cookien hjälper till att förbättra användarens upplevelse vid användning av tjänsten."
+    },
+    {
+      "header": "Vad är en cookie?",
+      "content": "En kaka (cookie) är en liten textfil som lagras på din dator och innehåller information. Kakor används normalt för att förbättra webbplatsen för dig som besökare. Det finns två typer av kakor.<ul><li>Den ena typen sparar en fil som ligger kvar på besökarens dator. Filen används till exempel för att du lättare ska kunna använda webbplatsen utifrån dina önskemål och intressen.</li><li>Den andra typen kallas sessionskaka. Under tiden en besökare är inne på en webbsida lagras den temporärt i besökarens datorminne. Sessionskakor försvinner när du stänger webbläsaren. Ingen personlig information som till exempel namn eller mejladress sparas om dig.</li></ul>"
+    }
+  ]
+}
