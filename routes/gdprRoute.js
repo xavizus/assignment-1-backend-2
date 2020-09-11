@@ -3,5 +3,6 @@ const gdprController = require('../controllers/gdprController');
 const verifyToken = require('../controllers/authController').verifyToken;
 
 router.delete('/', verifyToken.bind(),  gdprController.clearUserInformation.bind(gdprController));
+router.get('/', verifyToken.bind(),  gdprController.getUserInformation.bind(gdprController));
 
 module.exports = router
