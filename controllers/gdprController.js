@@ -55,6 +55,17 @@ class gdprController extends baseController {
         }
         res.status(this.httpStatus).json(this.message);
     }
+
+    getPrivacyPolicy(req, res) {
+        try {
+            let rawData = fs.readFileSync(path.resolve(__dirname + '/../public/privacy.json'));
+            this.message = JSON.parse(rawData);
+        } catch (error) {
+            this.message = error.message;
+            this.status = httpStatusCodes.BadRequest;
+        }
+        res.status(this.httpStatus).json(this.message);
+    }
 }
 
 module.exports = new gdprController();
