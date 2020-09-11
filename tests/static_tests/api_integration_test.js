@@ -29,6 +29,7 @@ describe('API',  function () {
             let testUser = await userModel.createUser(user, user.isAdmin);
             let randomNumberOfLists = randomNumber(1,4);
             testUser.todoLists = []
+            testUser.todoItems = []
             for(let index = 0; index < randomNumberOfLists; index++) {
                 let taskListResult = await todoListModel.addTodoList({
                     userId:testUser._id,
@@ -38,13 +39,14 @@ describe('API',  function () {
                 testUser.todoLists.push(taskListResult._id);
 
                 for(let taskIndex = 0; taskIndex < randomNumberOfTasks; taskIndex++) {
-                    await todoItemModel.addTodoItem(
+                    let todoItemResult = await todoItemModel.addTodoItem(
                         {
                             title: listOfTasks[randomNumber(0, listOfTasks.length-1)],
                             userId: testUser._id,
                             todoListId: taskListResult._id
                         }
-                    )
+                    );
+                    testUser.todoItems.push(todoItemResult);
                 }
             }
             testUser.token = await userModel.authenticateUser(user.username, user.password);
@@ -117,6 +119,19 @@ describe('API',  function () {
                 .then(response => {
                     expect(response).to.have.status(401);
                 })
+        });
+
+        it('Should get all information about the user', async function() {
+            await chai.request(app)
+                .get('/api/v1/gdpr')
+                .set('Authorization', `Bearer ${testUsers[0].token}`)
+                .send()
+                .then(response => {
+                   expect(response).to.have.status(200);
+                   expect(response.body.todoItems).to.equal(testUsers[0].todoItems.length);
+                   expect(response.body.todoLists).to.equal(testUsers[0].deletedTodoLists.length);
+                   expect(response.body.userInformation).to.equal(1);
+                });
         });
     });
     server.close();
