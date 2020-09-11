@@ -20,13 +20,11 @@ class todoListController extends baseController {
 
     async getTodoLists(req, res) {
         try {
-            let query = {
-                userId: req.user.userId
-            }
+            let userId = req.user.userId
             if(req.user.isAdmin) {
-                query = {}
+                userId = undefined;
             }
-            this.message = await todoListModel.getTodoLists(query);
+            this.message = await todoListModel.getTodoLists(userId);
         } catch(error) {
             this.message = error.message;
             this.httpStatus = httpStatusCodes.BadRequest;
