@@ -145,6 +145,17 @@ describe('API',  function () {
                   expect(Object.keys(response.body).length).to.be.equal(2);
                });
         });
+
+        it('Should get privacy policy', async function () {
+            await chai.request(app)
+                .get('/api/v1/gdpr/privacyPolicy')
+                .send()
+                .then(response => {
+                    expect(response).to.have.status(200);
+                    expect(response).to.have.header('Content-Type', 'application/json; charset=utf-8');
+                    expect(Object.keys(response.body).length).to.be.equal(2);
+                });
+        });
     });
     server.close();
 });
