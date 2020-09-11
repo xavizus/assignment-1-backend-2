@@ -23,6 +23,7 @@ async function clearDatabase(){
 describe('API',  function () {
     let testUsers = [];
     beforeEach(async() => {
+        testUsers = [];
         await clearDatabase();
         for(const user of users) {
             let testUser = await userModel.createUser(user, user.isAdmin);
@@ -85,6 +86,37 @@ describe('API',  function () {
                       expect(response.body).to.have.length(user.todoLists.length)
                    });
            }
+        });
+
+        it('Should delete one user', async function() {
+            let result = await chai.request(app)
+                .delete('/api/v1/gdpr')
+                .set('Authorization', `Bearer ${testUsers[0].token}`)
+                .send()
+                .then(response => {
+                    expect(response).to.have.status(200);
+                    return response.body;
+                });
+            expect(result).to.haveOwnProperty('deletedItems');
+            expect(result).to.haveOwnProperty('deletedTodoLists');
+            expect(result).to.haveOwnProperty('deleteUser');
+        });
+        it('Should test that a deleted user cannot be verified again!', async function () {
+            await chai.request(app)
+                .delete('/api/v1/gdpr')
+                .set('Authorization', `Bearer ${testUsers[0].token}`)
+                .send()
+                .then(response => {
+                    expect(response).to.have.status(200);
+                });
+
+            await chai.request(app)
+                .get('/api/v1/todoItems')
+                .set('Authorization', `Bearer ${testUsers[0].token}`)
+                .send()
+                .then(response => {
+                    expect(response).to.have.status(401);
+                })
         });
     });
     server.close();
