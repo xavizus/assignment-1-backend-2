@@ -25,6 +25,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
+      if: github.ref == 'ref/head/'
       with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "xavizus-todoapp" #Must be unique in Heroku
