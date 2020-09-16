@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
         if: github.ref == 'ref/head/staging'
         with:
