@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ release ]
+    branches: [ development ]
   pull_request:
     branches: [ staging ]
 
@@ -18,29 +18,29 @@ jobs:
         node-version: [12.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm test
-      env:
-        ENVIRONMENT: TEST
-        DBTLS: "false"
-        DBHOST: localhost
-        DATABASE: todolist
-        PAGINATION_COUNT: 10
-        NUMBER_OF_SALTS: 10
-        JWT_SECRET: IamSuperSecret
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: npm ci
+      - run: npm test
+        env:
+          ENVIRONMENT: TEST
+          DBTLS: "false"
+          DBHOST: localhost
+          DATABASE: todolist
+          PAGINATION_COUNT: 10
+          NUMBER_OF_SALTS: 10
+          JWT_SECRET: IamSuperSecret
   deploy:
     needs: test
     runs-on: ubuntu-latest
 
     steps:
-    - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
-      if: github.ref == 'ref/head/staging'
-      with:
+      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
+        if: github.ref == 'ref/head/staging'
+        with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "xavizus-todoapp" #Must be unique in Heroku
           heroku_email: "stephan.ljungros@gmail.com"
