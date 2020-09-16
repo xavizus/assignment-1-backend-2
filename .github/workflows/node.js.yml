@@ -10,8 +10,7 @@ on:
     branches: [ staging ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     strategy:
@@ -24,11 +23,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
-      with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "xavizus-todoapp" #Must be unique in Heroku
-          heroku_email: "stephan.ljungros@gmail.com"
     - run: npm ci
     - run: npm test
       env:
@@ -39,3 +33,14 @@ jobs:
         PAGINATION_COUNT: 10
         NUMBER_OF_SALTS: 10
         JWT_SECRET: IamSuperSecret
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
+      if: github.ref == 'ref/head/staging'
+      with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "xavizus-todoapp" #Must be unique in Heroku
+          heroku_email: "stephan.ljungros@gmail.com"
