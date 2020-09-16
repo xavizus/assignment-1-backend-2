@@ -33,16 +33,15 @@ jobs:
           PAGINATION_COUNT: 10
           NUMBER_OF_SALTS: 10
           JWT_SECRET: IamSuperSecret
-  deploy:
+  deploy_stage:
     needs: test
     runs-on: ubuntu-latest
-
+    if: github.ref == 'ref/heads/staging'
     steps:
       - uses: actions/checkout@v2
       - name: Deploying staging
-        if: github.ref == 'ref/heads/staging'
-        uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
+        uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "xavizus-todoapp" #Must be unique in Heroku
+          heroku_app_name: "xavizus-todoapp"
           heroku_email: "stephan.ljungros@gmail.com"
