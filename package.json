@@ -12,6 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/xavizus/Backend-2-todoApp.git"
   },
+  "config": {
+    "mongodbMemoryServer": {
+      "version": "4.4.1"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -34,6 +39,7 @@
     "chai-as-promised": "^7.1.1",
     "chai-http": "^4.3.0",
     "mocha": "^8.1.1",
+    "mongodb-memory-server": "^6.7.5",
     "nodemon": "^2.0.4"
   }
 }
