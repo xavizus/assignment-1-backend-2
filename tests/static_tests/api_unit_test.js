@@ -2,7 +2,7 @@ require('dotenv').config();
 const chai = require('chai');
 const expect = chai.expect;
 chai.use(require('chai-as-promised'));
-let {mongoose} = require('../../database/mongodb');
+let {connect, disconnect} = require('../../database/mongodb');
 const todoListModel = require('../../models/todoListModel');
 const todoItemModel = require('../../models/todoItemModel');
 const userModel = require('../../models/userModel');
@@ -20,6 +20,14 @@ async function clearDatabase(){
 }
 
 describe('Unit test', function () {
+
+    before( async() => {
+        await connect();
+    });
+    after(async () => {
+        await clearDatabase();
+        await disconnect();
+    })
 
     describe('User model tests', function () {
         let testUsers = [];

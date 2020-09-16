@@ -6,7 +6,7 @@ const app = require('../../index').app;
 const server = require('../../index').server;
 const expect = chai.expect;
 const {users, taskLists, listOfTasks} = require('../testData');
-let {mongoose} = require('../../database/mongodb');
+let {connect, disconnect} = require('../../database/mongodb');
 const todoListModel = require('../../models/todoListModel');
 const todoItemModel = require('../../models/todoItemModel');
 const userModel = require('../../models/userModel');
@@ -21,6 +21,15 @@ async function clearDatabase(){
     await todoItemModel.todoItemModel.deleteMany({});
 }
 describe('API',  function () {
+
+    before( async() => {
+        await connect()
+    });
+    after(async () => {
+        await clearDatabase();
+        await disconnect();
+    })
+
     let testUsers = [];
     beforeEach(async() => {
         testUsers = [];
@@ -53,10 +62,6 @@ describe('API',  function () {
             testUsers.push(testUser);
         }
     });
-
-    after(async () => {
-        await clearDatabase();
-    })
 
     describe('Successful tests', function() {
         it('Should authenticate users',async function () {
