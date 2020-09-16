@@ -24,6 +24,7 @@ describe('Unit test', function () {
     before( async() => {
         await connect();
     });
+
     after(async () => {
         await clearDatabase();
         await disconnect();

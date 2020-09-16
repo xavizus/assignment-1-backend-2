@@ -26,6 +26,7 @@ describe('API',  function () {
         await connect()
     });
     after(async () => {
+        server.close();
         await clearDatabase();
         await disconnect();
     })
