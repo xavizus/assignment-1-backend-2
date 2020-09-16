@@ -36,7 +36,7 @@ jobs:
   deploy_stage:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'ref/heads/development'
+    if: github.ref == 'refs/heads/development'
     steps:
       - uses: actions/checkout@v2
       - name: Deploying staging
