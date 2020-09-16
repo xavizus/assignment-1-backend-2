@@ -21,10 +21,6 @@ async function clearDatabase(){
 
 describe('Unit test', function () {
 
-    after(() => {
-        mongoose.connection.close();
-    });
-
     describe('User model tests', function () {
         let testUsers = [];
 

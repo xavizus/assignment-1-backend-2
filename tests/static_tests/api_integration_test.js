@@ -56,7 +56,6 @@ describe('API',  function () {
 
     after(async () => {
         await clearDatabase();
-        mongoose.connection.close();
     })
 
     describe('Successful tests', function() {
@@ -157,5 +156,4 @@ describe('API',  function () {
                 });
         });
     });
-    server.close();
 });
