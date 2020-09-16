@@ -8,7 +8,7 @@ const authRouter = require('./routes/authRoute');
 const todoListRouter = require('./routes/todoListRoute');
 const gdprRouter = require('./routes/gdprRoute');
 const path = require('path');
-let {mongoose} = require('./database/mongodb');
+const {connect} = require('./database/mongodb');
 /**
  * Middleware
  */
@@ -29,7 +29,10 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname + '/views/index.html'));
 })
 
-let server = app.listen(port, () => console.log(`Listening on port ${port}`));
+let server = app.listen(port, async() => {
+    await connect();
+    console.log(`Listening on port ${port}`);
+});
 
 module.exports.app = app;
 module.exports.server = server;
