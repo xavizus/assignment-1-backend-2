@@ -10,9 +10,6 @@ class userController extends baseController {
 
     async registerUser(req, res) {
         try {
-            if(!req.user.isAdmin) {
-                throw new Error('Is not admin');
-            }
             this.message = await userModel.createUser(req.body);
         } catch (error) {
             this.message = {msg: error.message};
