@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ staging, development ]
+    branches: [ master, staging, development ]
   pull_request:
-    branches: [ staging ]
+    branches: [ master, staging ]
 
 jobs:
   test:
@@ -41,5 +41,18 @@ jobs:
         uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "xavizus-todoapp"
-          heroku_email: "stephan.ljungros@gmail.com"
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME_STAGING}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+
+  deploy_master:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploying staging
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME_PROD}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
