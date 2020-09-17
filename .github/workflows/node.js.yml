@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ development ]
+    branches: [ staging, development ]
   pull_request:
     branches: [ staging ]
 
@@ -35,11 +35,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{github.ref}}
-      - run: echo ${{github.event_name}}
-      - run: echo ${{github.event.action}}
-      - run: echo ${{github.event.pull_request.merged}}
-        if: github.ref == 'refs/heads/staging' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+        if: github.ref == 'refs/heads/staging'
       - uses: actions/checkout@v2
       - name: Deploying staging
         uses: akhileshns/heroku-deploy@v3.4.6
