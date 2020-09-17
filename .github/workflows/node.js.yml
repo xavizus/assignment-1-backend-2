@@ -34,8 +34,8 @@ jobs:
   deploy_stage:
     needs: test
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/staging'
     steps:
-        if: github.ref == 'refs/heads/staging'
       - uses: actions/checkout@v2
       - name: Deploying staging
         uses: akhileshns/heroku-deploy@v3.4.6
