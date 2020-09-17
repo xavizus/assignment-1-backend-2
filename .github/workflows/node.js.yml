@@ -35,7 +35,6 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - name: Pull request merged
       - run: echo github.ref
       - run: echo github.event_name
       - run: echo github.event.action
