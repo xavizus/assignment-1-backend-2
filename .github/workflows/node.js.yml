@@ -35,10 +35,10 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - run: echo github.ref
-      - run: echo github.event_name
-      - run: echo github.event.action
-      - run: echo github.event.pull_request.merged
+      - run: echo ${{github.ref}}
+      - run: echo ${{github.event_name}}
+      - run: echo ${{github.event.action}}
+      - run: echo ${{github.event.pull_request.merged}}
         if: github.ref == 'refs/heads/staging' && github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
       - uses: actions/checkout@v2
       - name: Deploying staging
