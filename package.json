@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "mocha ./tests/static_tests/*_test.js"
+    "test": "cross-env ENVIRONMENT=TEST mocha ./tests/static_tests/*_test.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bootstrap.native": "^3.0.10",
+    "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
