@@ -5,18 +5,16 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ development ]
+    branches: [ master, staging, development ]
   pull_request:
-    branches: [ staging ]
+    branches: [ master, staging ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [12.x]
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -33,15 +31,28 @@ jobs:
           PAGINATION_COUNT: 10
           NUMBER_OF_SALTS: 10
           JWT_SECRET: IamSuperSecret
-  deploy:
+  deploy_stage:
     needs: test
     runs-on: ubuntu-latest
-
+    if: github.ref == 'refs/heads/staging'
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.4.6 # This is the action
-        if: github.ref == 'ref/head/staging'
+      - name: Deploying staging
+        uses: akhileshns/heroku-deploy@v3.4.6
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "xavizus-todoapp" #Must be unique in Heroku
-          heroku_email: "stephan.ljungros@gmail.com"
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME_STAGING}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+
+  deploy_master:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Deploying staging
+        uses: akhileshns/heroku-deploy@v3.4.6
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: ${{secrets.HEROKU_APP_NAME_PROD}}
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
